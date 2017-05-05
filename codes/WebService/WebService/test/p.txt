@@ -1,0 +1,24 @@
+{"description":
+{"captions":[{"confidence":0.25052490705397951,"text":"a remote control"}],
+"tags":["sitting","black","green","laptop","flower","computer","bird","white","room","remote"]},
+
+"metadata":{"format":"Jpeg","height":375,"width":600},
+"requestId":"7f92ec18-6f13-4ca7-a2a2-27442e421297"}
+
+{"language":"en",
+"orientation":"Up",
+"regions":[{"boundingBox":"127,155,357,94","lines":[{"boundingBox":"127,155,357,37",
+"words":[{"boundingBox":"127,155,86,32","text":"Dont"},
+{"boundingBox":"234,155,45,32","text":"be"},
+{"boundingBox":"299,155,58,32","text":"the"},
+{"boundingBox":"378,162,106,30","text":"same,"}]},
+{"boundingBox":"211,201,199,33","words":[{"boundingBox":"211,201,47,33","text":"be"},
+{"boundingBox":"280,201,118,33","text":"better"},
+{"boundingBox":"407,201,3,32","text":"!"}]},
+{"boundingBox":"429,239,55,10","words":[{"boundingBox":"429,239,14,10","text":"life"},
+{"boundingBox":"447,239,37,10","text":"advice"}]}]}],
+"textAngle":0.0}
+
+{"metadata":{"format":"Jpeg","height":375,"width":600},
+"requestId":"b752c2e9-fdaf-48d1-8cf8-4d08a53c544c",
+"tags":[]}
