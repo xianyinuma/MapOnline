@@ -9,17 +9,11 @@
 
 <ion-content>
   <ion-list>
-    <button ion-item *ngFor="let friend of items" (click)="itemTapped($event, friend)">
-      <ion-icon [name]="friend.icon" item-left></ion-icon>
+    <button ion-item *ngFor="let friend of friendsMessage" >
+      <!--<ion-icon [name]="friend.icon" item-left></ion-icon>-->
         {{friend.name}}
-      <div class="item-note" item-right>
-        {{friend.note}}
-      </div>
     </button>
   </ion-list>
 
 
-  <div *ngIf="selectedItem" padding>
-    You navigated here from <b>{{selectedItem.title}}</b>
-  </div>
 </ion-content>

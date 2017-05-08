@@ -3,15 +3,31 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Friends Home</ion-title>
+    <ion-title>{{friend.name}}</ion-title>
   </ion-navbar>
+
+  <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css" />
+
 </ion-header>
 
-<ion-content padding>
+<ion-content >
 
-  <p>
-    this is friend {{friend.name}} 's page.
-  </p>
+  <div id="map"></div>
+
+  <ion-fab right top id="fab">
+
+    <button ion-fab color="primary" (click)="thisDetail(friend.name)"><ion-icon name="ios-information-circle"></ion-icon></button>
+  </ion-fab>
+
+   <ion-fab right top id="fab">
+      <button ion-fab color="primary"><ion-icon name="add" ></ion-icon></button>
+    
+    <ion-fab-list side="bottom">
+      <button ion-fab color="primary" (click)="thisDetail(friend.name)"><ion-icon name="ios-information-circle"></ion-icon></button>
+      
+      <button ion-fab color="danger" (click)="unFollow(friend.name)"><ion-icon name="trash" ></ion-icon></button>
+    </ion-fab-list>
+  </ion-fab>
 
 
 </ion-content>

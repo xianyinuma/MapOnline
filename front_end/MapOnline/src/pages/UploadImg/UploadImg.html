@@ -9,24 +9,43 @@
 
 
 <ion-content padding >
-  <ion-img id ='img'  [src]="base64Image" border="1px solid black">
 
-  </ion-img>
+  <ion-card>
+    <img id="img" [src]="base64Image">
+    <ion-card-content>
+      <ion-item>
+        <ion-label color="primary" floating>Title</ion-label>
+        <ion-input [(ngModel)]="title" name="title" type="text"></ion-input>
+      </ion-item>
 
-  <div id="info">
-    <ion-list id="tags">
-      <ion-item-sliding *ngFor="let tag of tags">
-        <ion-item>{{tag}}</ion-item>
-        <ion-item-options><button ion-button color="danger" (click)="deleteItem(tag)"><ion-icon name="trash"></ion-icon></button></ion-item-options>
-      </ion-item-sliding>
-    </ion-list>
-  </div>
 
-  <div padding id="inputDes">
-    <ion-textarea rows=5 id="inputField" placeholder="Enter a description"></ion-textarea>
-    <button id="upload" color="secondary" ion-button full>upload</button>
+      <ion-textarea rows=5 id="inputField" placeholder="Enter a description" [(ngModel)]="description"></ion-textarea>
 
-  </div>
+    </ion-card-content>
+
+    <ion-row no-padding>
+      <ion-list  *ngFor="let tag of tags">
+        <ion-item-sliding>
+          <ion-item>
+            <!--<button ion-button clear small color="danger" icon-left>-->
+              <ion-icon color="danger" name='star'></ion-icon>
+            {{tag}}
+            <!--</button>-->
+          </ion-item>
+          <ion-item-options><button ion-button color="danger" (click)="deleteItem(tag)"><ion-icon name="trash"></ion-icon></button></ion-item-options>
+
+        </ion-item-sliding>
+
+      </ion-list>
+
+      <ion-col text-right>
+        <button ion-button clear small color="secondary" icon-left (click)="share()">
+          <ion-icon name='share-alt'></ion-icon>
+          Share
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-card>
 
 
 </ion-content>

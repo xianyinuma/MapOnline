@@ -6,8 +6,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import { UploadImgPage } from '../pages/UploadImg/UploadImg';
-import {LoginPage} from "../pages/login/login";
-import { TestPage} from "../pages/Test/Test";
+import { LoginPage } from "../pages/login/login";
+
+import { User } from './user.service';
 
 
 @Component({
@@ -17,7 +18,7 @@ export class MyApp {
   @ViewChild(Nav) nav: Nav;
   lt_info: any;
 
-  rootPage: any = LoginPage;
+  rootPage: any =  LoginPage;
 
   pages: Array<{title: string, component: any}>;
 
@@ -29,7 +30,6 @@ export class MyApp {
       { title: 'My Map', component: HomePage },
       { title: 'Friends', component: ListPage },
       { title: 'Upload ', component: UploadImgPage},
-      { title: 'test', component: TestPage}
 
     ];
 
