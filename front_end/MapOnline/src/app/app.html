@@ -1,0 +1,27 @@
+<ion-menu [content]="content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>EarthOnline Beta1.0</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+    <ion-list>
+      <button class="button button-outline button-positive"
+        menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
+        {{p.title}}
+      </button>
+    </ion-list>
+
+    <div id="lt_info">
+      <p id="location" >{{lt_info.location}}</p>
+      <p id="temperature">{{lt_info.temperature}}</p>
+    </div>
+  </ion-content>
+
+
+
+</ion-menu>
+
+<!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
+<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>

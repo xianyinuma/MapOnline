@@ -1,0 +1,32 @@
+<ion-header >
+  <ion-navbar >
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Upload</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding >
+  <ion-img id ='img'  [src]="base64Image" border="1px solid black">
+
+  </ion-img>
+
+  <div id="info">
+    <ion-list id="tags">
+      <ion-item-sliding *ngFor="let tag of tags">
+        <ion-item>{{tag}}</ion-item>
+        <ion-item-options><button ion-button color="danger" (click)="deleteItem(tag)"><ion-icon name="trash"></ion-icon></button></ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+  </div>
+
+  <div padding id="inputDes">
+    <ion-textarea rows=5 id="inputField" placeholder="Enter a description"></ion-textarea>
+    <button id="upload" color="secondary" ion-button full>upload</button>
+
+  </div>
+
+
+</ion-content>

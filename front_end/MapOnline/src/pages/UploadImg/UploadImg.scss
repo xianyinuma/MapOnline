@@ -1,0 +1,40 @@
+page-upload{
+  #img{
+    float :left;
+    width : 66%;
+    height : 50%;
+    margin: 0;
+  }
+
+  #info{
+    margin-left : 68%;
+    height: 50%;
+    overflow: scroll;
+  }
+
+  .card{
+    float: left;
+    margin:0;
+  }
+
+  .deleteButton{
+    float: right;
+    margin:0;
+  }
+
+  #inputDes{
+    position: fixed;
+    margin-top: 60%;
+    height: 35%;
+    width: 100%;
+    padding: 0;
+  }
+
+  #inputField{
+    border: 1px lightskyblue solid;
+  }
+
+  #upload{
+    margin-top: 5%;
+  }
+}
