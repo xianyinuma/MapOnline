@@ -22,6 +22,11 @@ public class UserService {
         return user;
     }
 
+    public User saveUser(User user) {
+        User user1 = userRepositoty.save(user);
+        return user1;
+    }
+
     public User findByUserID(int id) {
         User user = null;
         try{

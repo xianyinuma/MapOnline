@@ -27,4 +27,8 @@ public class TagService {
         Tag tag1 = tagRepository.save(tag);
         return tag1;
     }
+
+    public void deleteTag(int id) {
+        tagRepository.delete(id);
+    }
 }

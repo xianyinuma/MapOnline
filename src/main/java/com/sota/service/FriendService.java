@@ -22,4 +22,13 @@ public class FriendService {
         }
         return friends;
     }
+
+    public Friend saveFriend(Friend friend) {
+        Friend friend0 = friendRepository.save(friend);
+        return friend0;
+    }
+
+    public void deleteFriend(Friend friend) {
+        friendRepository.delete(friend);
+    }
 }

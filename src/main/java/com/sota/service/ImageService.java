@@ -35,4 +35,7 @@ public class ImageService {
         return image;
     }
 
+    public void deleteImage(int id) {
+        imageRepository.delete(id);
+    }
 }

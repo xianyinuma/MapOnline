@@ -1,6 +1,7 @@
 package com.sota.controller;
 
 import com.google.gson.Gson;
+
 import com.sota.entity.Friend;
 import com.sota.entity.Image;
 import com.sota.entity.Tag;
@@ -48,14 +49,33 @@ public class UserController {
         return "user/index";
     }
 
-    @RequestMapping(value = "login", method = RequestMethod.GET)
+    @RequestMapping(value = "register", method = RequestMethod.POST)
+    @ResponseBody
+    public String registerShow(@RequestParam(value = "username")String username,
+                           @RequestParam(value = "password")String password,
+                           HttpServletResponse response) {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        User user = userService.findUserByName(username);
+        RegisterResponse registerResponse = new RegisterResponse();
+        if ( null == user) {
+            registerResponse.setRegisterResult(true);
+            user = new User();
+            user.setName(username);
+            user.setPassword(password);
+            userService.saveUser(user);
+            registerResponse.setUserID(user.getId());
+        }
+        else {
+            registerResponse.setRegisterResult(false);
+        }
+        return getJsonData(registerResponse);
+    }
+
+    @RequestMapping(value = "login", method = RequestMethod.POST)
     @ResponseBody
     public String loginShow(@RequestParam(value = "username")String username,
                             @RequestParam(value = "password")String password,
             HttpServletResponse response) throws IOException {
-//        System.out.println(username + "   " + password);
-//        LoginResponse loginResponse = new LoginResponse(username, password);
-//        return loginResponse.getLoginResult();
         response.setHeader("Access-Control-Allow-Origin", "*");
         //return
         LoginResponse loginResponse = new LoginResponse();
@@ -64,8 +84,8 @@ public class UserController {
         if (login_state) {
             User user = userService.findUserByName(username);
             loginResponse.setUserID(user.getId());
-            getFriendMessages(loginResponse);
-            getImageMessages(loginResponse);
+            loginResponse.setFriendMessages(getFriendMessagesByUserID(user.getId()));
+            loginResponse.setImageMessages(getImageMessagesByUserID(user.getId()));
         }
         //json data return
         return getJsonData(loginResponse);
@@ -76,28 +96,29 @@ public class UserController {
     @ResponseBody
     public String uploadShow(@RequestParam(value = "username")String username,
                              @RequestParam(value = "password")String password,
-                             @RequestParam(value = "base64Str")String base64Str,
+                             @RequestParam(value = "base64Coding")String base64Coding,
                              @RequestParam(value = "latitude")double latitude,
                              @RequestParam(value = "longitude")double longitude,
                              HttpServletResponse response) throws IOException {
         response.setHeader("Access-Control-Allow-Origin", "*");
         if(loginCheck(username, password)) {
             User tempUser = userService.findUserByName(username);
-            StringBuilder stringBuilder = new StringBuilder(base64Str);
+            StringBuilder stringBuilder = new StringBuilder(base64Coding);
             //deal with the ' ', replace with '+'
-            for (int i = 0 ; i < base64Str.length(); i++) {
+            for (int i = 0 ; i < base64Coding.length(); i++) {
                 if (stringBuilder.charAt(i) == ' ') {
                     stringBuilder.setCharAt(i, '+');
                 }
             }
-            base64Str = stringBuilder.toString();
+            base64Coding = stringBuilder.toString();
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss");
             String currentDateString = format.format(new Date());
             System.out.println(currentDateString);
             String tempName = username + "-" + currentDateString + ".jpg";
             String tempUrl = "src/main/resources/images/" + tempName;
-            Base64String.base64ToImage(base64Str, tempUrl);
-
+            Base64String.base64ToImage(base64Coding, tempUrl);
+            String absolutePath = new File(tempUrl).getAbsolutePath();
+            System.out.println(absolutePath);
             Image newImage = new Image();
             newImage.setUserID(tempUser.getId());
             newImage.setLongitude(longitude);
@@ -112,18 +133,9 @@ public class UserController {
 //            response.setStatus(200);
 //            response.getWriter().write(getJsonData(uploadResponse));
         }
-        return "upload format error";
+        return "upload fail";
     }
 
-
-
-    @RequestMapping(value = "register", method = RequestMethod.GET)
-    @ResponseBody
-    public Object testShow(@RequestParam(value = "testParams")String testParams, HttpServletResponse response) {
-        response.setHeader("Access-Control-Allow-Origin", "*");
-
-        return testParams;
-    }
 
     @RequestMapping(value = "edit", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
@@ -133,9 +145,6 @@ public class UserController {
 
         if (loginCheck(editResponse.getUsername(), editResponse.getPassword())) {
             //login success
-//            System.out.println(editResponse.getUsername());
-//            System.out.println(editResponse.getPassword());
-//            System.out.println(uploadResponse.getTags());
             Image editedImage = new Image();
             Image preImage = imageService.findById(editResponse.getUploadResponse().getImageID());
             editedImage.setId(preImage.getId());
@@ -147,18 +156,142 @@ public class UserController {
             editedImage.setTitle(editResponse.getUploadResponse().getTitle());
             imageService.saveImage(editedImage);
 
-//            System.out.println(editResponse.getUploadResponse().getTags().length);
             for (int i = 0; i < editResponse.getUploadResponse().getTags().length; i++) {
                 Tag tag = new Tag();
                 tag.setImageID(editedImage.getId());
                 tag.setTagContent(editResponse.getUploadResponse().getTags()[i]);
                 tagService.saveTag(tag);
             }
-            return "edit success";
+            return "edition succeed";
         } else {
-            return "login error";
+            return "edition failed";
         }
     }
+
+
+    @RequestMapping(value = "view-friend", method = RequestMethod.POST)
+    @ResponseBody
+    public String friendImage(@RequestParam(value = "username")String username,
+                              @RequestParam(value = "password")String password,
+                              @RequestParam(value = "friendID")int friendID,
+                              HttpServletResponse response) {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+            if (loginCheck(username, password)) {
+                User currentUser = userService.findUserByName(username);
+                Friend[] friends = friendService.findAllByUserID(currentUser.getId());
+                boolean isFriend = false;
+                for (int i = 0; i < friends.length; i++) {
+                    if (friends[i].getUserID2() == friendID) {
+                        isFriend = true;
+                        break;
+                    }
+                }
+                if (isFriend) {
+                    FriendImage friendImage = new FriendImage();
+                    friendImage.setUserID(friendID);
+                    friendImage.setUsername(userService.findByUserID(friendID).getName());
+                    friendImage.setImageMessages(getImageMessagesByUserID(friendID));
+                    return getJsonData(friendImage);
+                } else {
+                    return "illegal access";
+                }
+            } else {
+                return "illegal access";
+            }
+    }
+
+    @RequestMapping(value = "delete-image", method = RequestMethod.POST)
+    @ResponseBody
+    public String deleteImage(@RequestParam(value = "username")String username,
+                              @RequestParam(value = "password")String password,
+                              @RequestParam(value = "imageID")int imageID,
+                              HttpServletResponse response) {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        if (loginCheck(username, password)) {
+            Image image = imageService.findById(imageID);
+            if ((image != null) &&  (image.getUserID() == userService.findUserByName(username).getId())) {
+                //delete all related tags
+                Tag[] tags = tagService.findAllByImageID(imageID);
+                if (tags != null) {
+                    for (int i = 0; i < tags.length; i++) {
+                        tagService.deleteTag(tags[i].getId());
+                    }
+                }
+                File file = new File(image.getImageUrl());
+                file.delete();
+                imageService.deleteImage(imageID);
+                //login success, delete image
+                return "delete successfully";
+            }
+        }
+
+        return "illegal access";
+    }
+
+
+    @RequestMapping(value = "follow-friend", method = RequestMethod.POST)
+    @ResponseBody
+    public String followFriend(@RequestParam(value = "username")String username,
+                              @RequestParam(value = "password")String password,
+                              @RequestParam(value = "friendUsername")String friendUsername,
+                              HttpServletResponse response) {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        if (loginCheck(username, password)) {
+            User user = userService.findUserByName(friendUsername);
+            int currentID = userService.findUserByName(username).getId();
+            if (user != null && !user.getName().equals(username)) {
+                // test is followed
+                Friend[] friends = friendService.findAllByUserID(currentID);
+                boolean isFollowed = false;
+                if (friends != null) {
+                    for (int i = 0; i < friends.length; i++) {
+                        if (userService.findByUserID(friends[i].getUserID2()).getName().equals(friendUsername)) {
+                            isFollowed = true;
+                            break;
+                        }
+                    }
+                }
+                if (isFollowed) {
+                    // had followed
+                    return "follow failed";
+                }
+                else {
+                    Friend friend = new Friend();
+                    friend.setUserID1(currentID);
+                    friend.setUserID2(user.getId());
+                    friendService.saveFriend(friend);
+                    return "" + user.getId();
+                }
+            }
+        }
+        return "follow failed";
+    }
+
+    @RequestMapping(value = "delete-friend", method = RequestMethod.POST)
+    @ResponseBody
+    public String deleteFriend(@RequestParam(value = "username")String username,
+                              @RequestParam(value = "password")String password,
+                              @RequestParam(value = "friendID")int friendID,
+                              HttpServletResponse response) {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        if (loginCheck(username, password)) {
+            User currentUser = userService.findUserByName(username);
+            Friend[] friends = friendService.findAllByUserID(currentUser.getId());
+            boolean isDeleted = false;
+            if (friends != null) {
+                for (int i = 0; i < friends.length; i++) {
+                    if (friends[i].getUserID2() == friendID) {
+                        //delete
+                        friendService.deleteFriend(friends[i]);
+                        isDeleted = true;
+                        return "delete successfully";
+                    }
+                }
+            }
+        }
+        return "delete failed";
+    }
+
 
     private  boolean loginCheck(String username, String password) {
         User user = userService.findUserByName(username);
@@ -172,24 +305,25 @@ public class UserController {
         }
     }
 
-    private void getFriendMessages(LoginResponse loginResponse) {
-        Friend[] friends = friendService.findAllByUserID(loginResponse.getUserID());
+    private FriendMessage[] getFriendMessagesByUserID(int userID) {
+        Friend[] friends = friendService.findAllByUserID(userID);
+        FriendMessage[] friendMessages = null;
         if (friends != null) {
-            FriendMesaage[] friendMesaages = new FriendMesaage[friends.length];
+            friendMessages = new FriendMessage[friends.length];
             for (int i = 0; i < friends.length; i++) {
-                friendMesaages[i] = new FriendMesaage();
+                friendMessages[i] = new FriendMessage();
                 int tempUserID = friends[i].getUserID2();
-                friendMesaages[i].setUserID(tempUserID);
+                friendMessages[i].setUserID(tempUserID);
                 User tempUser = userService.findByUserID(tempUserID);
-                friendMesaages[i].setName(tempUser.getName());
+                friendMessages[i].setName(tempUser.getName());
             }
-            loginResponse.setFriendMesaages(friendMesaages);
         }
+        return friendMessages;
     }
 
-    private void getImageMessages(LoginResponse loginResponse) throws IOException {
-        Image[] images = imageService.findAllByUserID(loginResponse.getUserID());
-        ImageMessage[] imageMessages;
+    private ImageMessage[] getImageMessagesByUserID(int userID) {
+        Image[] images = imageService.findAllByUserID(userID);
+        ImageMessage[] imageMessages = null;
         if (null != images) {
             imageMessages = new ImageMessage[images.length];
             // query all images
@@ -199,9 +333,6 @@ public class UserController {
                 imageMessages[i].setTitle(images[i].getTitle());
                 imageMessages[i].setDescription(images[i].getImageDescription());
                 imageMessages[i].setBase64Coding(Base64String.imageToBase64(images[i].getImageUrl()));
-//                System.out.println(imageMessages[i].getBase64Coding());
-//                Base64String.base64ToImage(imageMessages[i].getBase64Coding(), "src/main/resources/testout/test.jpg");
-                //query all tags
                 Tag[] tags = tagService.findAllByImageID(images[i].getId());
                 if (null != tags) {
 //                    System.out.println(tags.length);
@@ -210,8 +341,8 @@ public class UserController {
                 imageMessages[i].setLatitude(images[i].getLatitude());
                 imageMessages[i].setLongitude(images[i].getLongitude());
             }
-            loginResponse.setImageMessages(imageMessages);
         }
+        return imageMessages;
     }
 
     private UploadResponse getUploadResponse(Image image) throws MalformedURLException {
@@ -253,5 +384,47 @@ public class UserController {
         Gson gson = new Gson();
         Object object = gson.fromJson(jsonData, Object.class);
         return object;
+    }
+
+
+    private void getFriendMessages(LoginResponse loginResponse) {
+        Friend[] friends = friendService.findAllByUserID(loginResponse.getUserID());
+        if (friends != null) {
+            FriendMessage[] friendMessages = new FriendMessage[friends.length];
+            for (int i = 0; i < friends.length; i++) {
+                friendMessages[i] = new FriendMessage();
+                int tempUserID = friends[i].getUserID2();
+                friendMessages[i].setUserID(tempUserID);
+                User tempUser = userService.findByUserID(tempUserID);
+                friendMessages[i].setName(tempUser.getName());
+            }
+            loginResponse.setFriendMessages(friendMessages);
+        }
+    }
+    private void getImageMessages(LoginResponse loginResponse) throws IOException {
+        Image[] images = imageService.findAllByUserID(loginResponse.getUserID());
+        ImageMessage[] imageMessages;
+        if (null != images) {
+            imageMessages = new ImageMessage[images.length];
+            // query all images
+            for (int i = 0; i < images.length; i++) {
+                imageMessages[i] = new ImageMessage();
+                imageMessages[i].setImageID(images[i].getId());
+                imageMessages[i].setTitle(images[i].getTitle());
+                imageMessages[i].setDescription(images[i].getImageDescription());
+                imageMessages[i].setBase64Coding(Base64String.imageToBase64(images[i].getImageUrl()));
+//                System.out.println(imageMessages[i].getBase64Coding());
+//                Base64String.base64ToImage(imageMessages[i].getBase64Coding(), "src/main/resources/testout/test.jpg");
+                //query all tags
+                Tag[] tags = tagService.findAllByImageID(images[i].getId());
+                if (null != tags) {
+//                    System.out.println(tags.length);
+                    imageMessages[i].setTags(tags);
+                }
+                imageMessages[i].setLatitude(images[i].getLatitude());
+                imageMessages[i].setLongitude(images[i].getLongitude());
+            }
+            loginResponse.setImageMessages(imageMessages);
+        }
     }
 }

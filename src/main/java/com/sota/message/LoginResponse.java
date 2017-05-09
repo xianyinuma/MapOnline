@@ -1,24 +1,19 @@
 package com.sota.message;
 
-import com.sota.entity.User;
-import com.sota.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-
 /**
  * Created by wenjin on 2017/5/8.
  */
 public class LoginResponse {
     private boolean loginResult;
     private int userID;
-    //friend message
-    private FriendMesaage[] friendMesaages;
+    private FriendMessage[] friendMessages;
     private ImageMessage[] imageMessages;
 
 
-    public LoginResponse(boolean loginResult, int userID, FriendMesaage[] friendMesaages, ImageMessage[] imageMessages) {
+    public LoginResponse(boolean loginResult, int userID, FriendMessage[] friendMessages, ImageMessage[] imageMessages) {
         this.loginResult = loginResult;
         this.userID = userID;
-        this.friendMesaages = friendMesaages;
+        this.friendMessages = friendMessages;
         this.imageMessages = imageMessages;
     }
 
@@ -41,12 +36,12 @@ public class LoginResponse {
         this.userID = userID;
     }
 
-    public FriendMesaage[] getFriendMesaages() {
-        return friendMesaages;
+    public FriendMessage[] getFriendMessages() {
+        return friendMessages;
     }
 
-    public void setFriendMesaages(FriendMesaage[] friendMesaages) {
-        this.friendMesaages = friendMesaages;
+    public void setFriendMessages(FriendMessage[] friendMessages) {
+        this.friendMessages = friendMessages;
     }
 
     public ImageMessage[] getImageMessages() {
