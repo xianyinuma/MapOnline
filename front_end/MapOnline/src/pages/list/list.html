@@ -9,10 +9,11 @@
 
 <ion-content>
   <ion-list>
-    <button ion-item *ngFor="let friend of friendsMessage" >
-      <!--<ion-icon [name]="friend.icon" item-left></ion-icon>-->
-        {{friend.name}}
-    </button>
+    <ion-item *ngFor="let item of friendMessages">
+      <button ion-item (click)="itemTapped(item)">
+        {{item.name}}
+      </button>
+    </ion-item>
   </ion-list>
 
 

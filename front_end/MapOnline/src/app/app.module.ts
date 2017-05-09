@@ -17,7 +17,8 @@ import { UploadImgPage } from '../pages/UploadImg/UploadImg';
 import { DetailPage} from '../pages/DetailPage/DetailPage';
 import { FriendsDetailPage } from '../pages/friendsDetail/friendsDetail';
 
-import { User } from './user.service';
+// import  { TestPage } from '../pages/test/test';
+
 
 
 
@@ -47,6 +48,8 @@ class CameraMock extends Camera {
     DetailPage,
     FriendsDetailPage,
 
+    // TestPage
+
   ],
   imports: [
     BrowserModule,
@@ -65,6 +68,8 @@ class CameraMock extends Camera {
     UploadImgPage,
     DetailPage,
     FriendsDetailPage,
+
+    // TestPage
 
   ],
   providers: [

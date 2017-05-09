@@ -8,7 +8,8 @@ import { ListPage } from '../pages/list/list';
 import { UploadImgPage } from '../pages/UploadImg/UploadImg';
 import { LoginPage } from "../pages/login/login";
 
-import { User } from './user.service';
+// import  { TestPage } from '../pages/test/test';
+
 
 
 @Component({
@@ -29,8 +30,7 @@ export class MyApp {
     this.pages = [
       { title: 'My Map', component: HomePage },
       { title: 'Friends', component: ListPage },
-      { title: 'Upload ', component: UploadImgPage},
-
+      // { title: 'test', component: TestPage}
     ];
 
     this.lt_info = {

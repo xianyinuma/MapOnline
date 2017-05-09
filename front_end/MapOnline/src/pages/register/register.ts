@@ -2,43 +2,88 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 
+
+import { Headers, Http, RequestOptions } from '@angular/http';
+import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/operator/map';
+
 @Component({
   selector: 'page-register',
   templateUrl: 'register.html',
 })
 
-export class RegisterPage{
+export class RegisterPage {
   password;
   cfpassword;
   username;
 
-  constructor(public navCtrl: NavController,public alertCtrl: AlertController){
+  constructor(public navCtrl: NavController, public alertCtrl: AlertController, private http: Http) {
 
   }
 
-  checkValid(){
-    if (this.password != null && this.cfpassword != null && this.username != null){
-      if (this.checkSame(this.password, this.cfpassword) && this.checkValidUsername()){
+  registerJson = {
+    userID: 1,
+    registerResult: false
+  };
+
+  checkValid() {
+    if (this.password != null && this.cfpassword != null && this.username != null) {
+      if (this.checkSame(this.password, this.cfpassword) && this.checkValidUsername()) {
         //todo 将用户加入数据库
         let infoUpload = {
           username: this.username,
           password: this.password
         };
 
-        let alert = this.alertCtrl.create({
-          title: 'Congratulations! ',
-          subTitle: this.username + " ! You have successfully registered !",
-          buttons: [{
-            text: 'OK',
-            handler: ()=> {
-              this.navCtrl.pop();
+        let url = "http://192.168.31.36:8080/register";
+        let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+        let param = "username=" + this.username + "&password=" + this.password;
+        let options = new RequestOptions({ headers: headers, method: "post" });
+
+        let result: boolean;
+        this.http.post(url, param, options)
+          .toPromise()
+          .then(res => res.json()).then(body => {
+            console.log(body);
+            console.log(body.registerResult);
+            result = body.registerResult;
+            console.log("result is " + result);
+
+
+            if (result) {
+
+              let alert = this.alertCtrl.create({
+                title: 'Congratulations! ',
+                subTitle: this.username + " ! You have successfully registered !",
+                buttons: [{
+                  text: 'OK',
+                  handler: () => {
+                    this.navCtrl.pop();
+                  }
+                }]
+              });
+              alert.present();
+            } else {
+              let alert = this.alertCtrl.create({
+                title: 'Error! ',
+                subTitle: "Username  " + this.username + " has been used!",
+                buttons: [{
+                  text: 'OK',
+                  handler: () => {
+                    this.navCtrl.pop();
+                    this.navCtrl.push(RegisterPage);
+                  }
+                }]
+              });
+
+              alert.present();
             }
-          }]
-        });
 
-        alert.present();
+          });
 
-      }else{
+
+
+      } else {
         if (!this.checkSame(this.password, this.cfpassword)) {
           let alert = this.alertCtrl.create({
             title: 'Error ',
@@ -46,7 +91,7 @@ export class RegisterPage{
             buttons: [
               {
                 text: 'ok',
-                handler: ()=>{
+                handler: () => {
                   this.username = "";
                   this.password = "";
                   this.cfpassword = "";
@@ -56,14 +101,14 @@ export class RegisterPage{
 
 
           alert.present();
-        }else{
+        } else {
           let alert = this.alertCtrl.create({
             title: 'Error ',
             subTitle: "Username " + this.username + " has already been registered ! ",
             buttons: [
               {
                 text: 'ok',
-                handler: ()=>{
+                handler: () => {
                   this.username = "";
                   this.password = "";
                   this.cfpassword = "";
@@ -74,7 +119,7 @@ export class RegisterPage{
           alert.present();
         }
       }
-    }else{
+    } else {
       let alert = this.alertCtrl.create({
         title: 'Warning',
         subTitle: "Username or Password cannot be empty! ",
@@ -84,12 +129,12 @@ export class RegisterPage{
     }
   }
 
-  checkSame(pw1,pw2){
+  checkSame(pw1, pw2) {
     if (pw1 == pw2) return true;
     else return false;
   }
 
-  checkValidUsername(){
+  checkValidUsername() {
     return true;//todo
   }
 

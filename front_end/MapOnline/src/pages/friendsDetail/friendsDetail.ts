@@ -9,30 +9,29 @@ import { AlertController } from 'ionic-angular';
 })
 
 
-export class FriendsDetailPage{
-  info :string;
+export class FriendsDetailPage {
+  info: string;
 
-  @Input() friendName: string = "Ulice D. Sandwich";
+  @Input() friendName: string;
+  @Input() imageMessages: any;
 
-  card1: any = {
-    // photo: "",
-    title: "title1",
-    description: "des1",
-    tags: ["tag1","tag2"]
-  }
-
-  card2: any = {
-    // photo: " ",
-    title: "title2",
-    description: "des232",
-    tags: ["tag1_1","tag1_2"]
-  }
   photoCards: any[] = [
-      this.card1,this.card2
+
   ];
 
-  constructor(public navCtrl: NavController, public navParam: NavParams, public alertCtrl: AlertController){
+  constructor(public navCtrl: NavController, public navParam: NavParams, public alertCtrl: AlertController) {
     this.friendName = this.navParam.get('friendName');
+    this.imageMessages = this.navParam.get('imageMessages');
+
+    for (let i = 0; i < this.imageMessages.length; i++) {
+      let card = {
+        title: this.imageMessages[i].title,
+        description: this.imageMessages[i].description,
+        tags: this.imageMessages[i].tags
+      }
+      this.photoCards.push(card);
+
+    }
   }
 
 }

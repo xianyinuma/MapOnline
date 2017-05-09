@@ -10,7 +10,9 @@
 
 <ion-content padding>
   <ion-card *ngFor="let thiscard of photoCards">
-    <img id="img" [src]="thiscard.photo">
+    <img src="data:image/gif;base64,{{thiscard.photo}}" />
+
+
     <ion-card-content>
       <ion-card-title>
         {{thiscard.title}}
@@ -26,7 +28,7 @@
       <ion-list *ngFor="let tag of thiscard.tags">
         <ion-item>
           <ion-icon color="danger" name='star'></ion-icon>
-          {{tag}}
+          {{tag.tagContent}}
         </ion-item>
       </ion-list>
 

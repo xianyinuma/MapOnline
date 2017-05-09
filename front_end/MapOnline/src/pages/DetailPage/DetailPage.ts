@@ -1,38 +1,41 @@
 import { Component, Input } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
+import { UserService } from '../../app/user.service';
 
 
 @Component({
   selector: 'page-detail',
-  templateUrl: 'DetailPage.html'
+  templateUrl: 'DetailPage.html',
+  providers: [UserService]
 })
 
 
 export class DetailPage{
-  info :string;
 
-  @Input() friendName: string = "Ulice D. Sandwich";
+  user: any;
+  imageMessages:any;
 
-  card1: any = {
-    // photo: "",
-    title: "title1",
-    description: "des1",
-    tags: ["tag1","tag2"]
-  }
+  friendName: string ;
 
-  card2: any = {
-    // photo: " ",
-    title: "title2",
-    description: "des232",
-    tags: ["tag1_1","tag1_2"]
-  }
-  photoCards: any[] = [
-      this.card1,this.card2
-  ];
+  photoCards: any[] = [];
 
-  constructor(public navCtrl: NavController, public navParam: NavParams, public alertCtrl: AlertController){
+  constructor(public userService:UserService, public navCtrl: NavController, public navParam: NavParams, public alertCtrl: AlertController){
+    this.user = this.userService.getUser();
+    this.imageMessages = this.user.imageMessages;
+    this.friendName = this.user.username;
 
+    for (let i =0 ;i < this.imageMessages.length; i++){
+      let card = {
+        title: this.imageMessages[i].title,
+        description: this.imageMessages[i].description,
+        tags: this.imageMessages[i].tags,
+        photo: this.imageMessages[i].base64Coding
+      }
+      this.photoCards.push(card);
+
+    }
+    
   }
 
   deleteCard(card){
