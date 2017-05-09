@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="WebService">
+    <output-path>$PROJECT_DIR$/out/artifacts/WebService</output-path>
+    <root id="archive" name="WebService.jar">
+      <element id="module-output" name="Demo" />
+    </root>
+  </artifact>
+</component>

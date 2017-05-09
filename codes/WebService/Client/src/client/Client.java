@@ -28,7 +28,9 @@ public class Client {
         Service service1 = Service.create(wsdlUrl1, qName1);
         WeatherService weatherService = service1.getPort(WeatherService.class);
 
-        System.out.println(weatherService.showWeather(39.91488908,116.40387397));
+        for (int i = 29; i < 50; i++) {
+            System.out.println(weatherService.showWeather(i,121.4));
+        }
 
     }
 }

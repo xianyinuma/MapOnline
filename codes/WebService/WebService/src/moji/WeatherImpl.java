@@ -42,13 +42,20 @@ public class WeatherImpl implements WeatherService{
         JSONObject jsonObject = queryWeather(lat, lon);
         System.out.println(jsonObject);
         JSONObject data = jsonObject.getJSONObject("data");
-        JSONObject forecast = (JSONObject) data.getJSONArray("forecast").get(0);
+        JSONObject forecast;
+
+        try{
+            forecast = (JSONObject) data.getJSONArray("forecast").get(0);
+        }catch (Exception e){
+            return new WeatherData();
+        }
 
         WeatherData weatherData = new WeatherData(Integer.parseInt((String) forecast.get("tempDay")),
                 Integer.parseInt((String) forecast.get("tempNight")),
                 (String) data.getJSONObject("city").get("name"),
                 (String) forecast.get("conditionDay"),
                 (String) forecast.get("conditionNight"));
+
 
         System.out.println(weatherData);
 
