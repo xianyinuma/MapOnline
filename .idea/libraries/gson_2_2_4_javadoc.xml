@@ -1,0 +1,21 @@
+<component name="libraryTable">
+  <library name="gson-2.2.4-javadoc">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../spring-backend/src/lib/json/gson-2.2.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../spring-backend/src/lib/json/json-lib-2.4-jdk15.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../spring-backend/src/lib/json/ezmorph-1.0.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../spring-backend/src/lib/json/commons-logging.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../spring-backend/src/lib/json/commons-lang-2.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../spring-backend/src/lib/json/commons-collections-3.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../spring-backend/src/lib/json/commons-beanutils-1.7.0.jar!/" />
+      <root url="file://$PROJECT_DIR$" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../spring-backend/src/lib/json/gson-2.2.4-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../spring-backend/src/lib/json/gson-2.2.4-sources.jar!/" />
+      <root url="file://$PROJECT_DIR$/src/main/java" />
+    </SOURCES>
+  </library>
+</component>

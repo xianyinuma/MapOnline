@@ -1,0 +1,14 @@
+{"description":
+{"captions":[{"confidence":0.016998374662352583,"text":"a couple of men standing on top of a table"}],
+"tags":["different","photo","various","room","table"]},
+"metadata":{"format":"Jpeg","height":966,"width":1024},
+"requestId":"f86a0b42-7185-4bef-b304-5a7de06d4f96"}
+
+
+{"language":"en",
+"orientation":"NotDetected",
+"regions":[]}
+
+{"metadata":{"format":"Jpeg","height":966,"width":1024},
+"requestId":"3d1ea3c2-f1d8-4b37-b02e-3dd33b6453e7",
+"tags":[{"confidence":0.59983420372009277,"name":"different"}]}
