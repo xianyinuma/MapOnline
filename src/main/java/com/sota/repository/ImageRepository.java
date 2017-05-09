@@ -14,4 +14,7 @@ public interface ImageRepository extends JpaRepository<Image, Integer>{
     @Query("select t from Image t where t.userID = :userID")
     Image[] findAllByUserID(@Param("userID") int userID);
 
+    @Query("select t from Image t where t.id = :id")
+    Image findByImageId(@Param("id")int id);
+
 }

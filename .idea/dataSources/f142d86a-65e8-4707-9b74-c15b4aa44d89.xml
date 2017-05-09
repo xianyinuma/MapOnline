@@ -93,6 +93,7 @@
     <column id="27" parent="8" name="image_url">
       <Position>7</Position>
       <DataType>varchar(255)|0</DataType>
+      <NotNull>1</NotNull>
     </column>
     <index id="28" parent="8" name="image_imageID_uindex">
       <ColNames>id</ColNames>

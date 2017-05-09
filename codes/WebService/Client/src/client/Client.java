@@ -19,8 +19,8 @@ public class Client {
         Service service = Service.create(wsdlUrl, qName);
         CognitiveService cognitiveService = service.getPort(CognitiveService.class);
 
-        System.out.println(cognitiveService.depictPicture("test/x1.jpg").getCaptions()[0].getText());
-        System.out.println(cognitiveService.adultJudge("test/x1.jpg").getIsAdultContent());
+        System.out.println(cognitiveService.depictPicture("Client/test/x1.jpg").getCaptions()[0].getText());
+//        System.out.println(cognitiveService.adultJudge("test/x1.jpg").getIsAdultContent());
 
 
         URL wsdlUrl1 = new URL("http://localhost:2333/WeatherService?wsdl");

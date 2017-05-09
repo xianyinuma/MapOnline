@@ -8,14 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Created by wenjin on 2017/5/8.
  */
 public class LoginResponse {
-    private String loginResult;
+    private boolean loginResult;
     private int userID;
     //friend message
     private FriendMesaage[] friendMesaages;
     private ImageMessage[] imageMessages;
 
 
-    public LoginResponse(String loginResult, int userID, FriendMesaage[] friendMesaages, ImageMessage[] imageMessages) {
+    public LoginResponse(boolean loginResult, int userID, FriendMesaage[] friendMesaages, ImageMessage[] imageMessages) {
         this.loginResult = loginResult;
         this.userID = userID;
         this.friendMesaages = friendMesaages;
@@ -26,10 +26,10 @@ public class LoginResponse {
 
     }
 
-    public void setLoginResult(String loginResult) {
+    public void setLoginResult(boolean loginResult) {
         this.loginResult = loginResult;
     }
-    public String getLoginResult() {
+    public boolean getLoginResult() {
         return loginResult;
     }
 

@@ -6,15 +6,17 @@ import com.sota.entity.Tag;
  * Created by wenjin on 2017/5/8.
  */
 public class ImageMessage {
+    private int imageID;
     private String title;
     private String description;
     private String base64Coding;
     private Tag[] tags;
-    public ImageMessage() {
-    }
-
     private double longitude;
     private double latitude;
+
+    public ImageMessage() {
+
+    }
 
     public ImageMessage(String title, String description, String base64Coding, Tag[] tags, double longitude, double latitude) {
         this.title = title;
@@ -23,6 +25,14 @@ public class ImageMessage {
         this.tags = tags;
         this.longitude = longitude;
         this.latitude = latitude;
+    }
+
+    public int getImageID() {
+        return imageID;
+    }
+
+    public void setImageID(int imageID) {
+        this.imageID = imageID;
     }
 
     public String getTitle() {

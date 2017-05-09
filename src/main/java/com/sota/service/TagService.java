@@ -22,4 +22,9 @@ public class TagService {
         }
         return tags;
     }
+
+    public Tag saveTag(Tag tag) {
+        Tag tag1 = tagRepository.save(tag);
+        return tag1;
+    }
 }
