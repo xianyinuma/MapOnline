@@ -49,7 +49,7 @@ domain: + port + /upload, post: username=string&password=string&longitude=double
 
 backend to front:
 A. identity or format error:
-"upload fail"(string)
+{"status": false}
 B. upload success:
 {
     "imageID": 2,
@@ -82,8 +82,8 @@ B. upload success:
 
 #4. edit
 front to backend:
-domain: + port + /edit, post data as following:
-{
+domain: + port + /edit, post data as following: formData fromat
+jsonData={
     "username": "maji",
     "password": "majiji",
     "uploadResponse": {
@@ -161,9 +161,9 @@ domain: + port + /follow-friend, post: username=string&password=string&friendUse
 
 backend to front:
 A. follow successfully, identity correct
-{friendID: userID(number)}
+{"friendID": userID(number)}
 B. fllow failed, identity incorrect or had followed
-{friendID: 0}
+{"status": false}
 
 #8. delete friend
 front to backend:
