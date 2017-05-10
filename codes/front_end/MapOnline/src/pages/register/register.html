@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Register</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding id="content-box" overflow-scroll="true" style="overflow: hidden">
+
+  <form>
+    <ion-item class="login-item">
+      <ion-label color="primary" floating>Username</ion-label>
+      <ion-input [(ngModel)]="username" name="username" type="text"></ion-input>
+    </ion-item>
+
+    <ion-item class="login-item">
+      <ion-label color="primary" floating>Password</ion-label>
+      <ion-input [(ngModel)]="password" name="password" type="password"></ion-input>
+    </ion-item>
+
+    <ion-item class="login-item">
+      <ion-label color="primary" floating>Confirm Password</ion-label>
+      <ion-input [(ngModel)]="cfpassword" name="cfpassword" type="password"></ion-input>
+    </ion-item>
+
+    <button ion-button full id="login-button" (click)="checkValid()">注册</button>
+
+  </form>
+
+</ion-content>

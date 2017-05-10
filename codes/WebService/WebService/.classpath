@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="F:/学习/2017年春季/面向服务技术与应用/MapOnline/codes/WebService/jar/json/commons-beanutils-1.7.0.jar"/>
+	<classpathentry kind="lib" path="F:/学习/2017年春季/面向服务技术与应用/MapOnline/codes/WebService/jar/json/commons-collections-3.1.jar"/>
+	<classpathentry kind="lib" path="F:/学习/2017年春季/面向服务技术与应用/MapOnline/codes/WebService/jar/json/commons-lang-2.5.jar"/>
+	<classpathentry kind="lib" path="F:/学习/2017年春季/面向服务技术与应用/MapOnline/codes/WebService/jar/json/commons-logging.jar"/>
+	<classpathentry kind="lib" path="F:/学习/2017年春季/面向服务技术与应用/MapOnline/codes/WebService/jar/json/ezmorph-1.0.3.jar"/>
+	<classpathentry kind="lib" path="F:/学习/2017年春季/面向服务技术与应用/MapOnline/codes/WebService/jar/json/json-lib-2.4-jdk15.jar"/>
+	<classpathentry kind="lib" path="F:/学习/2017年春季/面向服务技术与应用/MapOnline/codes/WebService/jar/httpcomponents-client-4.3.1-bin/lib/commons-codec-1.6.jar"/>
+	<classpathentry kind="lib" path="F:/学习/2017年春季/面向服务技术与应用/MapOnline/codes/WebService/jar/httpcomponents-client-4.3.1-bin/lib/commons-logging-1.1.3.jar"/>
+	<classpathentry kind="lib" path="F:/学习/2017年春季/面向服务技术与应用/MapOnline/codes/WebService/jar/httpcomponents-client-4.3.1-bin/lib/fluent-hc-4.3.1.jar"/>
+	<classpathentry kind="lib" path="F:/学习/2017年春季/面向服务技术与应用/MapOnline/codes/WebService/jar/httpcomponents-client-4.3.1-bin/lib/httpclient-4.3.1.jar"/>
+	<classpathentry kind="lib" path="F:/学习/2017年春季/面向服务技术与应用/MapOnline/codes/WebService/jar/httpcomponents-client-4.3.1-bin/lib/httpclient-cache-4.3.1.jar"/>
+	<classpathentry kind="lib" path="F:/学习/2017年春季/面向服务技术与应用/MapOnline/codes/WebService/jar/httpcomponents-client-4.3.1-bin/lib/httpcore-4.3.jar"/>
+	<classpathentry kind="lib" path="F:/学习/2017年春季/面向服务技术与应用/MapOnline/codes/WebService/jar/httpcomponents-client-4.3.1-bin/lib/httpmime-4.3.1.jar"/>
+	<classpathentry kind="output" path="out/production/Demo"/>
+</classpath>

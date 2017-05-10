@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{username}} 's map</ion-title>
+  </ion-navbar>
+
+  <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css" />
+
+</ion-header>
+
+<ion-content>
+
+  <div id="map"></div>
+
+
+  <ion-fab center bottom id="fab" >
+    <button ion-fab color="danger" ><ion-icon name="add"></ion-icon></button>
+    <ion-fab-list side="left">
+      <button ion-fab color="primary" (click)="takePicture()"><ion-icon name="ios-camera" ></ion-icon></button>
+    </ion-fab-list>
+    <ion-fab-list side="right">
+      <button ion-fab color="secondary" (click)="getPhoto()"><ion-icon name="ios-image" ></ion-icon></button>
+    </ion-fab-list>
+  </ion-fab>
+
+  <ion-fab right top id="fab2">
+      <button ion-fab color="primary"><ion-icon name="add" ></ion-icon></button>
+    
+    <ion-fab-list side="bottom">
+      <button ion-fab color="primary" (click)="followSomeone()"><ion-icon name="ios-person-add" ></ion-icon></button>
+      <button ion-fab color="primary" (click)="thisDetail()"><ion-icon name="ios-information-circle" ></ion-icon></button>
+    </ion-fab-list>
+  </ion-fab>
+
+</ion-content>

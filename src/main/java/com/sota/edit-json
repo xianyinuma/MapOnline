@@ -1,0 +1,31 @@
+{
+        "username": "maji",
+        "password": "majiji",
+        "uploadResponse": {
+            "imageID": 34,
+            "description": "a man standing in the dark",
+            "adultOrNot": 0,
+            "tags": [
+                "man",
+                "person",
+                "dark",
+                "looking",
+                "standing",
+                "front",
+                "black",
+                "monitor",
+                "holding",
+                "water",
+                "red",
+                "room",
+                "flying"
+            ],
+            "weatherData": {
+                "tempDay": 30,
+                "tempNight": 12,
+                "cityName": "鹤峰县",
+                "conditionDay": "晴",
+                "conditionNight": "晴"
+            }
+        }
+    }

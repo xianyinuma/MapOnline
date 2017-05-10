@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{friendName}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-card *ngFor="let thiscard of photoCards">
+    <img id="img" [src]="thiscard.photo">
+    <ion-card-content>
+      <ion-card-title>
+        {{thiscard.title}}
+      </ion-card-title>
+
+      <p>
+        {{thiscard.description}}
+      </p>
+
+    </ion-card-content>
+
+    <ion-row no-padding>
+      <ion-list *ngFor="let tag of thiscard.tags">
+        <ion-item>
+          <ion-icon color="danger" name='star'></ion-icon>
+          {{tag.tagContent}}
+        </ion-item>
+      </ion-list>
+
+
+    </ion-row>
+  </ion-card>
+
+
+</ion-content>
