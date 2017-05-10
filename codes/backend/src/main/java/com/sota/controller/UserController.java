@@ -1,7 +1,7 @@
 package com.sota.controller;
 
-import com.google.gson.Gson;
 
+import com.google.gson.Gson;
 import com.sota.entity.Friend;
 import com.sota.entity.Image;
 import com.sota.entity.Tag;
@@ -46,7 +46,7 @@ public class UserController {
 
     @RequestMapping(value = "index")
     public String index(){
-        return "user/index";
+        return "/index";
     }
 
     @RequestMapping(value = "register", method = RequestMethod.POST)
@@ -113,7 +113,6 @@ public class UserController {
             base64Coding = stringBuilder.toString();
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss");
             String currentDateString = format.format(new Date());
-            System.out.println(currentDateString);
             String tempName = username + "-" + currentDateString + ".jpg";
             String tempUrl = "src/main/resources/images/" + tempName;
             Base64String.base64ToImage(base64Coding, tempUrl);
@@ -133,7 +132,7 @@ public class UserController {
 //            response.setStatus(200);
 //            response.getWriter().write(getJsonData(uploadResponse));
         }
-        return "upload fail";
+        return "{\"status\": false}";
     }
 
 
@@ -162,9 +161,9 @@ public class UserController {
                 tag.setTagContent(editResponse.getUploadResponse().getTags()[i]);
                 tagService.saveTag(tag);
             }
-            return "edition succeed";
+            return "{\"status\": true}";
         } else {
-            return "edition failed";
+            return "{\"status\": false}";
         }
     }
 
@@ -193,10 +192,10 @@ public class UserController {
                     friendImage.setImageMessages(getImageMessagesByUserID(friendID));
                     return getJsonData(friendImage);
                 } else {
-                    return "illegal access";
+                    return "{\"status\": false}";
                 }
             } else {
-                return "illegal access";
+                return "{\"status\": false}";
             }
     }
 
@@ -221,11 +220,11 @@ public class UserController {
                 file.delete();
                 imageService.deleteImage(imageID);
                 //login success, delete image
-                return "delete successfully";
+                return "{\"status\": true}";
             }
         }
 
-        return "illegal access";
+        return "{\"status\": false}";
     }
 
 
@@ -253,18 +252,18 @@ public class UserController {
                 }
                 if (isFollowed) {
                     // had followed
-                    return "follow failed";
+                    return "{\"status\": false}";
                 }
                 else {
                     Friend friend = new Friend();
                     friend.setUserID1(currentID);
                     friend.setUserID2(user.getId());
                     friendService.saveFriend(friend);
-                    return "" + user.getId();
+                    return "{\"friendID\": " + user.getId() + "}";
                 }
             }
         }
-        return "follow failed";
+        return "{\"status\": false}";
     }
 
     @RequestMapping(value = "delete-friend", method = RequestMethod.POST)
@@ -284,12 +283,12 @@ public class UserController {
                         //delete
                         friendService.deleteFriend(friends[i]);
                         isDeleted = true;
-                        return "delete successfully";
+                        return "{\"status\": true}";
                     }
                 }
             }
         }
-        return "delete failed";
+        return "{\"status\": false}";
     }
 
 
@@ -368,9 +367,7 @@ public class UserController {
         QName qName1 = new QName("http://moji/", "WeatherImplService");
         Service service1 = Service.create(wsdlUrl1, qName1);
         WeatherService weatherService = service1.getPort(WeatherService.class);
-        uploadResponse.setWeatherData(weatherService.showWeather(image.getLatitude(),image.getLongitude()));
-//        System.out.println(weatherService.showWeather(image.getLatitude(),image.getLongitude()));
-
+        uploadResponse.setWeatherData(weatherService.showWeather(image.getLatitude(), image.getLongitude()));
         return uploadResponse;
     }
 
@@ -386,45 +383,46 @@ public class UserController {
         return object;
     }
 
-
-    private void getFriendMessages(LoginResponse loginResponse) {
-        Friend[] friends = friendService.findAllByUserID(loginResponse.getUserID());
-        if (friends != null) {
-            FriendMessage[] friendMessages = new FriendMessage[friends.length];
-            for (int i = 0; i < friends.length; i++) {
-                friendMessages[i] = new FriendMessage();
-                int tempUserID = friends[i].getUserID2();
-                friendMessages[i].setUserID(tempUserID);
-                User tempUser = userService.findByUserID(tempUserID);
-                friendMessages[i].setName(tempUser.getName());
-            }
-            loginResponse.setFriendMessages(friendMessages);
-        }
-    }
-    private void getImageMessages(LoginResponse loginResponse) throws IOException {
-        Image[] images = imageService.findAllByUserID(loginResponse.getUserID());
-        ImageMessage[] imageMessages;
-        if (null != images) {
-            imageMessages = new ImageMessage[images.length];
-            // query all images
-            for (int i = 0; i < images.length; i++) {
-                imageMessages[i] = new ImageMessage();
-                imageMessages[i].setImageID(images[i].getId());
-                imageMessages[i].setTitle(images[i].getTitle());
-                imageMessages[i].setDescription(images[i].getImageDescription());
-                imageMessages[i].setBase64Coding(Base64String.imageToBase64(images[i].getImageUrl()));
-//                System.out.println(imageMessages[i].getBase64Coding());
-//                Base64String.base64ToImage(imageMessages[i].getBase64Coding(), "src/main/resources/testout/test.jpg");
-                //query all tags
-                Tag[] tags = tagService.findAllByImageID(images[i].getId());
-                if (null != tags) {
-//                    System.out.println(tags.length);
-                    imageMessages[i].setTags(tags);
-                }
-                imageMessages[i].setLatitude(images[i].getLatitude());
-                imageMessages[i].setLongitude(images[i].getLongitude());
-            }
-            loginResponse.setImageMessages(imageMessages);
-        }
-    }
 }
+//
+//    private void getFriendMessages(LoginResponse loginResponse) {
+//        Friend[] friends = friendService.findAllByUserID(loginResponse.getUserID());
+//        if (friends != null) {
+//            FriendMessage[] friendMessages = new FriendMessage[friends.length];
+//            for (int i = 0; i < friends.length; i++) {
+//                friendMessages[i] = new FriendMessage();
+//                int tempUserID = friends[i].getUserID2();
+//                friendMessages[i].setUserID(tempUserID);
+//                User tempUser = userService.findByUserID(tempUserID);
+//                friendMessages[i].setName(tempUser.getName());
+//            }
+//            loginResponse.setFriendMessages(friendMessages);
+//        }
+//    }
+//
+//    private void getImageMessages(LoginResponse loginResponse) throws IOException {
+//        Image[] images = imageService.findAllByUserID(loginResponse.getUserID());
+//        ImageMessage[] imageMessages;
+//        if (null != images) {
+//            imageMessages = new ImageMessage[images.length];
+//            // query all images
+//            for (int i = 0; i < images.length; i++) {
+//                imageMessages[i] = new ImageMessage();
+//                imageMessages[i].setImageID(images[i].getId());
+//                imageMessages[i].setTitle(images[i].getTitle());
+//                imageMessages[i].setDescription(images[i].getImageDescription());
+//                imageMessages[i].setBase64Coding(Base64String.imageToBase64(images[i].getImageUrl()));
+////                System.out.println(imageMessages[i].getBase64Coding());
+////                Base64String.base64ToImage(imageMessages[i].getBase64Coding(), "src/main/resources/testout/test.jpg");
+//                //query all tags
+//                Tag[] tags = tagService.findAllByImageID(images[i].getId());
+//                if (null != tags) {
+////                    System.out.println(tags.length);
+//                    imageMessages[i].setTags(tags);
+//                }
+//                imageMessages[i].setLatitude(images[i].getLatitude());
+//                imageMessages[i].setLongitude(images[i].getLongitude());
+//            }
+//            loginResponse.setImageMessages(imageMessages);
+//        }
+//    }
