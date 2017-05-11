@@ -22,7 +22,7 @@ SOTA2017 Project
 ***
 
 ### git目录简介
-- code\front_end: 前端代码。可直接下载部署
+- code\front_end: 前端代码。(*注*：ionic项目传入git中只能传代码，想要实现运行还得安装相应的node_module）
 - code\backend: 后端代码。真实后端部署在阿里云上，IP为118.89.184.85，端口8080。
 - code\WebService: JAX-WS封装的SOAP webservice代码。同样也部署在阿里云上。
 - docs:简要的需求文档、展示ppt、展示的图片
