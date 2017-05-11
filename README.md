@@ -5,13 +5,19 @@ SOTA2017 Project
 生活，立于足迹。
 新一代的地图社交。
 ### 主要功能
-- **注册、登录** 
-- **在地球上展示图片**
-- **上传、删除图片**
+- **注册、登录** 如下图所示，输入用户名与密码即可完成登录，注册也只需用户名与密码验证<br>
+![图片不见了！！！呜呜呜](https://github.com/xianyinuma/MapOnline/blob/master/docs/p4.jpg)
+- **上传、删除图片** 用户可以拍照或从相册选择照片上传，经过微软识别API，会反馈一些图片信息给用户，用户可以修改返回信息（也可不修改）然后确认上传，上传的图片将会以坐标Marker的形式展示在地图上<br>
+![图片不见了！！！呜呜呜](https://github.com/xianyinuma/MapOnline/blob/master/docs/p3.jpg)
+- **在地球上展示图片** 如下图所示，地图上显示多个坐标Marker，用户可以点击Marker来查看自己以前发的图片。<br>
+![图片不见了！！！呜呜呜](https://github.com/xianyinuma/MapOnline/blob/master/docs/p1.jpg)
+- **关注、取关好友** 用户可以随意关注或取消关注好友，好友关注的形式类似微博，查看他发的地图动态~
+- **查看好友的状态信息**<br>
+![图片不见了！！！呜呜呜](https://github.com/xianyinuma/MapOnline/blob/master/docs/p2.jpg)
+![图片不见了！！！呜呜呜](https://github.com/xianyinuma/MapOnline/blob/master/docs/p5.jpg)
+
 - **智能分析图片，编辑信息**
 - **定位获取天气**
-- **关注、取关好友**
-- **查看好友的状态信息**
 
 ***
 
@@ -31,7 +37,7 @@ SOTA2017 Project
 ### 问题与解决
 - 由于angular2的http通信存在**跨域问题（Access-Control-Allow-Origin）**，让我们在前后端通信方面花了大量的时间进行了低效率debug。最后经过大量的资料查询，了解到需要在后端增加跨域的允许，最终才将这个问题解决。
 - angular2中http通信的**post**方法无法传输**json格式的数据**，最终用普通的string格式（x-www-form-urlencoded）来代替（我们也很绝望...）
-- *注*：我们的前端ionic项目在不同的电脑（不同系统）进行迁移的时候，需要重装node_module。
+- *注*：ionic项目在不同的电脑（不同系统）进行迁移的时候，需要重装node_module，这也是我们遇到的问题之一，希望TA在看我们的代码的时候也记得。
 
 ----
 #### 联系我们
