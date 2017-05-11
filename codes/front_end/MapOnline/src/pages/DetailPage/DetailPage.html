@@ -10,7 +10,7 @@
 
 <ion-content padding>
     <ion-card *ngFor="let thiscard of photoCards">
-        <img [src]="thiscard.photo" />
+        <img [src]="thiscard.safePhoto" />
 
 
         <ion-card-content>

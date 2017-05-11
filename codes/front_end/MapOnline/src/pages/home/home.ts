@@ -52,7 +52,15 @@ export class HomePage {
     let curlong;
     let curlati;
 
-    var onSuccess = function (position) {
+
+    //定位数据获取失败响应
+    function onError(error) {
+      console.log('code: ' + error.code + '\n' +
+        'message: ' + error.message + '\n');
+    }
+
+    //开始获取定位数据
+    navigator.geolocation.getCurrentPosition(position => {
       let infowindow;
 
       for (let i = 0; i < thisIMs.length; i++) {
@@ -84,8 +92,8 @@ export class HomePage {
       });
       console.log(position.coords.longitude);
 
-      curlong = position.coords.longitude;
-      curlati = position.coords.latitude;
+      this.curLongitude = position.coords.longitude;
+      this.curLatitude = position.coords.latitude;
       // console.log(this.curLongitude + " " + this.curLatitude);
 
       // marker.setMap(map);
@@ -103,18 +111,7 @@ export class HomePage {
       // 设置点标记的动画效果，此处为弹跳效果
       marker2.setAnimation('AMAP_ANIMATION_BOUNCE');
 
-    };
-    //定位数据获取失败响应
-    function onError(error) {
-      console.log('code: ' + error.code + '\n' +
-        'message: ' + error.message + '\n');
-    }
-
-    //开始获取定位数据
-    navigator.geolocation.getCurrentPosition(onSuccess, onError);
-    this.curLatitude = curlati;
-    this.curLongitude = curlong;
-
+    }, onError);
   }
 
 
@@ -154,25 +151,58 @@ export class HomePage {
             let returnJson: any;
             this.http.post(url, param, options)
               .toPromise()
-              .then(res => {
-                console.log(res);
-                returnJson = res;
-                let alert3 = this.alertCtrl.create({
-                  title: "Info",
-                  subTitle: returnJson,
-                  buttons: ['ok']
-                });
-                alert3.present();
+              .then(res => res.json())
+              .then(body => {
+                console.log(body);
+                if (body.friendID != null) {
+
+                  returnJson = body;
+                  let alert3 = this.alertCtrl.create({
+                    title: "Info",
+                    subTitle: "Success!",
+                    buttons: ['ok']
+                  });
+                  alert3.present();
+
+                  //login again
+                  let url = "http://118.89.184.85:8080/login";
+                  let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+                  let param = "username=" + this.username + "&password=" + this.password;
+                  let options = new RequestOptions({ headers: headers, method: "post" });
+
+                  this.http.post(url, param, options)
+                    .toPromise()
+                    .then(res => res.json())
+                    .then(body => {
+                      console.log(body);
+
+                      let login_result = body.loginResult;
+                      this.userService.setUser({
+                        userID: body.userID,
+                        username: this.username,
+                        loginResult: body.loginResult,
+                        imageMessages: body.imageMessages,
+                        friendMessages: body.friendMessages,
+                        password: this.password
+                      });
+
+
+
+
+                      this.navCtrl.setRoot(HomePage);
+                    });
+
+
+                } else {
+                  let alert3 = this.alertCtrl.create({
+                    title: "Info",
+                    subTitle: "No such user or you have already add him/her!",
+                    buttons: ['ok']
+                  });
+                  alert3.present();
+                }
 
               });
-            // .then(res => res.json()).then(body => {
-            //   console.log(body);
-            //   // returnJson = body;
-            //   // console.log("ts");
-            //   // console.log(returnJson);
-
-            // });
-
           }
         }
       ]
@@ -207,36 +237,7 @@ export class HomePage {
 
       this.base64Image = "data:image/jpeg;base64," + imageData;
 
-      let photoJson = this.httpUploadPictureAndGetMsg(imageData);
-
-      /*let photoJson = {
-        "imageID": 34,
-        "description": "a man standing in the dark",
-        "adultOrNot": 0,
-        "tags": [
-          "man",
-          "person",
-          "dark",
-          "looking",
-          "standing",
-          "front",
-          "black",
-          "monitor",
-          "holding",
-          "water",
-          "red",
-          "room",
-          "flying"
-        ],
-        "weatherData": {
-          "tempDay": 30,
-          "tempNight": 12,
-          "cityName": "鹤峰县",
-          "conditionDay": "晴",
-          "conditionNight": "晴"
-        }
-      };*/
-
+      this.httpUploadPictureAndGetMsg(imageData);
 
     }, (err) => {
       // Handle error
@@ -247,63 +248,30 @@ export class HomePage {
 
   //todo
   takePicture() {
-    let imageData: string = `/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAyADIDASIAAhEBAxEB/8QAHAAAAgIDAQEAAAAAAAAAAAAAAAcFBgMECAIB/8QANBAAAgEDAgMFBAoDAAAAAAAAAQIDAAQRBRIGIUEHEzFhcRUiUZEUFyMyM0JSgaLBYnKS/8QAGAEBAQEBAQAAAAAAAAAAAAAAAwIEAAH/xAAdEQACAwADAQEAAAAAAAAAAAAAAQIRIQMSMUFR/9oADAMBAAIRAxEAPwCydonHVpwdbQp3X0nUJwTFAGwAP1Megz86Sdquo8capLqWtXDPGp2gDko/xUdBUJx1xBJxLxNe6k5Kxlu7gQnO2McgP79Sav3BkKW2mWdvuAdl3MPM1hnLqsNcEfYeFrQIBHZqyjqRzrTvOFbQ8jZqo8himVZQhV+1Vhy+FeL+IOimNCeXM4oVNiUhEa9o0ukOLi0kdVU55H3k8watHZ3x/fWl5FYapdzXFvKwUGZ9xU9CCeY9K3uMrdTE6EA7lPKlIH2t1DqeRrVB9loU8eHWxnUkkMMGiucoe0HV4oUjE2Qihcnyoq6Jwl+1TgpuGdcSezTOlX0mYcH8NvEof68vSp+zsBHbW8jxSzvcMqBYzjaPM9BTA7YLS3ueDO9nP2ltcRSxHPi27aR8maoHQZ7b2cEmaNcfrGRWXkeiw8NLTC1rqix27XSZPdsjy71XryNY9feeS+MZW9nXeECwybR6k1tS3UM2qxJan0YqFQenyrELyOLVZY7h1Mbe6Tjcp9RRp7ZZG6lapJEYVS5jlhyMSDdkfEMORpTatD3WpXCRrkAluXQYyaf189naabJ3LRtv5+54VQeFdJivtbld4xIk12kBUjIKfmH8h8qbjlREleFBi0a8liSRdOvWVlDBliYgg9RyorrMoqHYgUKvIADwFFPb/A8NXjfS21rhO9tUbbL3feR8s5YDIFJbQJZJ4Qk74RV3kk8sCug42zEM9RSB1+a24f4rvtPVkaKF92wdI5Bnb+2flWfkjZUH8M8V3bX1yq3WnTzDbhQkDMwQnk2R4ftWCW4srW4LWenzxM4IAeBwSvU8+R9fGt57H2qkdxZyrsC7cZxivtppxszJPcyKuDtyeo9fhUIQiNUlmjtY5IWzFIMrk0wexnT4hw99PmjDTyTSFHPPA+6cf80qeKNZhZe7tcbFGyMDr50+eADajgrRjYjELWyNg+OSMtnzzmmiqQcmSUj++3qaKwyY7xufU0UhBIxfhD0rlztSZvrK1Q7jnvVHj02LRRUnI98OTyrZuqyyBc+AY4r3r9xN7Px30mP9jRRR/RCnTsSJjk5CjHlzrp7slJPZ3o2T+Rh/NqKKVkPwsD/fb1ooorwk/9k=`
+    let testImgData: string = `/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAyADIDASIAAhEBAxEB/8QAHAAAAgIDAQEAAAAAAAAAAAAAAAcFBgMECAIB/8QANBAAAgEDAgMFBAoDAAAAAAAAAQIDAAQRBRIGIUEHEzFhcRUiUZEUFyMyM0JSgaLBYnKS/8QAGAEBAQEBAQAAAAAAAAAAAAAAAwIEAAH/xAAdEQACAwADAQEAAAAAAAAAAAAAAQIRIQMSMUFR/9oADAMBAAIRAxEAPwCydonHVpwdbQp3X0nUJwTFAGwAP1Megz86Sdquo8capLqWtXDPGp2gDko/xUdBUJx1xBJxLxNe6k5Kxlu7gQnO2McgP79Sav3BkKW2mWdvuAdl3MPM1hnLqsNcEfYeFrQIBHZqyjqRzrTvOFbQ8jZqo8himVZQhV+1Vhy+FeL+IOimNCeXM4oVNiUhEa9o0ukOLi0kdVU55H3k8watHZ3x/fWl5FYapdzXFvKwUGZ9xU9CCeY9K3uMrdTE6EA7lPKlIH2t1DqeRrVB9loU8eHWxnUkkMMGiucoe0HV4oUjE2Qihcnyoq6Jwl+1TgpuGdcSezTOlX0mYcH8NvEof68vSp+zsBHbW8jxSzvcMqBYzjaPM9BTA7YLS3ueDO9nP2ltcRSxHPi27aR8maoHQZ7b2cEmaNcfrGRWXkeiw8NLTC1rqix27XSZPdsjy71XryNY9feeS+MZW9nXeECwybR6k1tS3UM2qxJan0YqFQenyrELyOLVZY7h1Mbe6Tjcp9RRp7ZZG6lapJEYVS5jlhyMSDdkfEMORpTatD3WpXCRrkAluXQYyaf189naabJ3LRtv5+54VQeFdJivtbld4xIk12kBUjIKfmH8h8qbjlREleFBi0a8liSRdOvWVlDBliYgg9RyorrMoqHYgUKvIADwFFPb/A8NXjfS21rhO9tUbbL3feR8s5YDIFJbQJZJ4Qk74RV3kk8sCug42zEM9RSB1+a24f4rvtPVkaKF92wdI5Bnb+2flWfkjZUH8M8V3bX1yq3WnTzDbhQkDMwQnk2R4ftWCW4srW4LWenzxM4IAeBwSvU8+R9fGt57H2qkdxZyrsC7cZxivtppxszJPcyKuDtyeo9fhUIQiNUlmjtY5IWzFIMrk0wexnT4hw99PmjDTyTSFHPPA+6cf80qeKNZhZe7tcbFGyMDr50+eADajgrRjYjELWyNg+OSMtnzzmmiqQcmSUj++3qaKwyY7xufU0UhBIxfhD0rlztSZvrK1Q7jnvVHj02LRRUnI98OTyrZuqyyBc+AY4r3r9xN7Px30mP9jRRR/RCnTsSJjk5CjHlzrp7slJPZ3o2T+Rh/NqKKVkPwsD/fb1ooorwk/9k=`
 
 
-    // const options: CameraOptions = {
-    //   quality: 100,
-    //   destinationType: this.camera.DestinationType.DATA_URL,
-    //   encodingType: this.camera.EncodingType.JPEG,
-    //   mediaType: this.camera.MediaType.PICTURE
-    // };
+    const options: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    };
 
-    // this.camera.getPicture(options).then((imageData) => {
+    this.camera.getPicture(options).then((imageData) => {
     // imageData is either a base64 encoded string or a file URI
     // If it's base64:
     this.base64Image = "data:image/jpeg;base64," + imageData;
 
     this.httpUploadPictureAndGetMsg(imageData);
-    
-    /*
-          let photoJson = {
-            "imageID": 34,
-            "description": "a man standing in the dark",
-            "adultOrNot": 0,
-            "tags": [
-              "man",
-              "person",
-              "dark",
-              "looking",
-              "standing",
-              "front",
-              "black",
-              "monitor",
-              "holding",
-              "water",
-              "red",
-              "room",
-              "flying"
-            ],
-            "weatherData": {
-              "tempDay": 30,
-              "tempNight": 12,
-              "cityName": "鹤峰县",
-              "conditionDay": "晴",
-              "conditionNight": "晴"
-            }
-          };*/
+    });
 
-
-    // }, (err) => {
-    //   // Handle error
-    //   console.log(err);
-    // });
   }
 
   private httpUploadPictureAndGetMsg(imageData: string) {
     let uploadUrl: string = "http://118.89.184.85:8080/upload";
     let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
-    let param = "username=" + this.userService.getUser().username + "&password=" + this.userService.getUser().password + "&longitude=120&latitude=30&base64Coding=" + imageData;
+    let param = "username=" + this.userService.getUser().username + "&password=" + this.userService.getUser().password + "&longitude=" + this.curLongitude + "&latitude=" + this.curLatitude + "&base64Coding=" + imageData;
     let options = new RequestOptions({ headers: headers, method: "post" });
     console.log(param);
 

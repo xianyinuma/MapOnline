@@ -8,7 +8,7 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 
 //for pic
-import { DomSanitizer } from '@angular/platform-browser'
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'
 
 @Component({
   selector: 'page-detail',
@@ -38,9 +38,10 @@ export class DetailPage {
         tags: this.imageMessages[i].tags,
         photo: 'data:image/jpeg;base64,' + this.imageMessages[i].base64Coding,
         imageID: this.imageMessages[i].imageID,
+        safePhoto: null
       };
 
-      card.photo = this.sanitizer.bypassSecurityTrustResourceUrl(card.photo);
+      card.safePhoto = this.sanitizer.bypassSecurityTrustResourceUrl(card.photo);
       this.photoCards.push(card);
 
     }
@@ -72,6 +73,16 @@ export class DetailPage {
           }
         });
         this.photoCards = ret;
+
+        //set UserImageMessage
+        let imgRet = [];
+        for (let i = 0; i < this.imageMessages.length; i++) {
+          if (this.imageMessages[i].imageID != card.imageID)
+            imgRet.push(this.imageMessages[i]);
+        }
+        let userRet = this.userService.getUser();
+        userRet.imageMessages = imgRet;
+        this.userService.setUser(userRet);
 
       });
 

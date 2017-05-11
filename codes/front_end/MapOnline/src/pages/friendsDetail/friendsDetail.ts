@@ -30,9 +30,10 @@ export class FriendsDetailPage {
         title: this.imageMessages[i].title,
         description: this.imageMessages[i].description,
         photo: 'data:image/jpeg;base64,' + this.imageMessages[i].base64Coding,
-        tags: this.imageMessages[i].tags
+        tags: this.imageMessages[i].tags,
+        safePhoto: null
       }
-      card.photo = this.sanitizer.bypassSecurityTrustResourceUrl(card.photo);
+      card.safePhoto = this.sanitizer.bypassSecurityTrustResourceUrl(card.photo);
       this.photoCards.push(card);
 
     }

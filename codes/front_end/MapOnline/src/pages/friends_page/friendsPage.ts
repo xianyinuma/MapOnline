@@ -93,14 +93,18 @@ export class FriendsPage {
     this.http.post(deleteUrl, param, options)
       .toPromise()
       .then(res => {
-        // console.log(res);
-        returnJson = res;
-        // let alert3 = this.alertCtrl.create({
-        //   title: "Info",
-        //   subTitle: returnJson,
-        //   buttons: ['ok']
-        // });
-        // alert3.present();
+
+        //set UserfriendMessage
+        let friendRet = [];
+        let userRet = this.userService.getUser();
+        let friendMsg = userRet.friendMessages;
+        for (let i = 0; i < friendMsg.length; i++) {
+          if (friendMsg[i].friendId != this.friendJson.friendId)
+            friendRet.push(friendMsg[i]);
+        }
+        userRet.imageMessages = friendRet;
+        this.userService.setUser(userRet);
+        
       });
   }
 
