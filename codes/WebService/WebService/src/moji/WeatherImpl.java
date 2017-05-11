@@ -20,7 +20,7 @@ import java.util.Map;
 
 @WebService(name = "WeatherService")
 @SOAPBinding(style = SOAPBinding.Style.RPC, use = SOAPBinding.Use.LITERAL)
-public class WeatherImpl implements WeatherService{
+public class WeatherImpl implements WeatherService {
     //北京
     public static final double lat = 39.91488908;
     public static final double lon = 116.40387397;
@@ -44,10 +44,10 @@ public class WeatherImpl implements WeatherService{
         JSONObject data = jsonObject.getJSONObject("data");
         JSONObject forecast;
 
-        try{
+        try {
             forecast = (JSONObject) data.getJSONArray("forecast").get(0);
-        }catch (Exception e){
-            return new WeatherData();
+        } catch (Exception e) {
+            return new WeatherData(0, 0, "无", "无", "无");
         }
 
         WeatherData weatherData = new WeatherData(Integer.parseInt((String) forecast.get("tempDay")),

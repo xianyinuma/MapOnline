@@ -47,13 +47,13 @@ export class FriendsPage {
 
 
   private httpGetImgs() {
-    let deleteUrl: string = "http://192.168.31.36:8080/view-friend";
+    let getImgUrl: string = "http://118.89.184.85:8080/view-friend";
     let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
     let param = "username=" + this.userService.getUser().username + "&password=" + this.userService.getUser().password + "&friendID=" + this.friend.userID;
     let options = new RequestOptions({ headers: headers, method: "post" });
     console.log(param);
 
-    this.http.post(deleteUrl, param, options)
+    this.http.post(getImgUrl, param, options)
       .toPromise()
       .then(res => {
         this.imageMessages = res.json().imageMessages;
@@ -83,7 +83,7 @@ export class FriendsPage {
   }
 
   private httpDeleteFriend() {
-    let deleteUrl: string = "http://192.168.31.36:8080/delete-friend";
+    let deleteUrl: string = "http://118.89.184.85:8080/delete-friend";
     let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
     let param = "username=" + this.userService.getUser().username + "&password=" + this.userService.getUser().password + "&friendID=" + this.friend.userID;
     let options = new RequestOptions({ headers: headers, method: "post" });

@@ -78,7 +78,7 @@ class CameraMock extends Camera {
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     Camera,
     Geolocation,
-    HTTP
+    // HTTP
     
 
   ]

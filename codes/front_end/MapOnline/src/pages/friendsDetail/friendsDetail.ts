@@ -2,6 +2,8 @@ import { Component, Input } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 
+//for pic
+import { DomSanitizer } from '@angular/platform-browser'
 
 @Component({
   selector: 'page-friendsdetail',
@@ -19,7 +21,7 @@ export class FriendsDetailPage {
 
   ];
 
-  constructor(public navCtrl: NavController, public navParam: NavParams, public alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParam: NavParams, public alertCtrl: AlertController, private sanitizer: DomSanitizer) {
     this.friendName = this.navParam.get('friendName');
     this.imageMessages = this.navParam.get('imageMessages');
 
@@ -27,8 +29,10 @@ export class FriendsDetailPage {
       let card = {
         title: this.imageMessages[i].title,
         description: this.imageMessages[i].description,
+        photo: 'data:image/jpeg;base64,' + this.imageMessages[i].base64Coding,
         tags: this.imageMessages[i].tags
       }
+      card.photo = this.sanitizer.bypassSecurityTrustResourceUrl(card.photo);
       this.photoCards.push(card);
 
     }

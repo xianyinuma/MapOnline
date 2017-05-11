@@ -51,7 +51,7 @@ export class LoginPage {
         return;
       } else {
         // 服务器通信
-        let url = "http://192.168.31.36:8080/login";
+        let url = "http://118.89.184.85:8080/login";
         let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
         let param = "username=" + this.username + "&password=" + this.password;
         let options = new RequestOptions({ headers: headers, method: "post" });

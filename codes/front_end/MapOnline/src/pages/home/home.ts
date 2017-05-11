@@ -146,7 +146,7 @@ export class HomePage {
           handler: data => {
 
             console.log(data.othername);
-            let url = "http://192.168.31.36:8080/follow-friend";
+            let url = "http://118.89.184.85:8080/follow-friend";
             let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
             let param = "username=" + this.username + "&password=" + this.password + "&friendUsername=" + data.othername;
             let options = new RequestOptions({ headers: headers, method: "post" });
@@ -301,13 +301,13 @@ export class HomePage {
   }
 
   private httpUploadPictureAndGetMsg(imageData: string) {
-    let deleteUrl: string = "http://192.168.31.36:8080/upload";
+    let uploadUrl: string = "http://118.89.184.85:8080/upload";
     let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
     let param = "username=" + this.userService.getUser().username + "&password=" + this.userService.getUser().password + "&longitude=120&latitude=30&base64Coding=" + imageData;
     let options = new RequestOptions({ headers: headers, method: "post" });
     console.log(param);
 
-    this.http.post(deleteUrl, param, options)
+    this.http.post(uploadUrl, param, options)
       .toPromise()
       .then(res => res.json())
       .then(body => {
